@@ -1,15 +1,12 @@
 import { kv } from '@vercel/kv';
-import { Resend } from 'resend';
 import { NextResponse } from 'next/server';
-
-const resend = new Resend(process.env.RESEND_API_KEY);
 
 const NOTIFY_EMAIL = 'connect@indonesiatobacco.com';
 
 export async function POST(request) {
   try {
     const { email } = await request.json();
-    
+
     if (!email || !email.includes('@')) {
       return NextResponse.json(
         { error: 'Invalid email' },
@@ -23,18 +20,20 @@ export async function POST(request) {
       dateStyle: 'full',
       timeStyle: 'short',
     });
-    
+
     // Add to a set (prevents duplicates)
     const isNew = await kv.sadd('emails', email);
-    
+
     // Also store with timestamp for reference
     await kv.hset('email_details', {
       [email]: timestamp
     });
 
     // Send notification email for new subscribers
-    if (isNew) {
+    if (isNew && process.env.RESEND_API_KEY) {
       try {
+        const { Resend } = await import('resend');
+        const resend = new Resend(process.env.RESEND_API_KEY);
         await resend.emails.send({
           from: 'Indonesia Tobacco <notifications@indonesiatobacco.com>',
           to: NOTIFY_EMAIL,
@@ -83,11 +82,11 @@ export async function GET(request) {
     // Get all emails
     const emails = await kv.smembers('emails');
     const details = await kv.hgetall('email_details');
-    
-    return NextResponse.json({ 
+
+    return NextResponse.json({
       count: emails.length,
       emails,
-      details 
+      details
     });
   } catch (error) {
     console.error('Error fetching emails:', error);
