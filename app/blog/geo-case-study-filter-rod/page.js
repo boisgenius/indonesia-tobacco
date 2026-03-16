@@ -1,34 +1,65 @@
-export const metadata = {
-  title: 'Case Study: GEO for B2B — ITS Filter Rod | Indonesia Tobacco',
-  description: 'How a niche Indonesian manufacturer got cited by AI using llms.txt — Generative Engine Optimization case study.',
-};
+'use client';
+
+import { useState } from 'react';
 
 export default function GeoCaseStudy() {
-  return (
-    <div style={{ minHeight: '100vh', background: '#000', color: '#FFF' }}>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap');
+  const [dark, setDark] = useState(false);
 
+  const bg = dark ? '#000' : '#FFFFFF';
+  const fg = dark ? '#FFF' : '#111';
+  const muted = dark ? '#9ca3af' : '#6b7280';
+  const body = dark ? '#d1d5db' : '#374151';
+  const border = dark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)';
+  const codeBg = dark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)';
+  const thBg = dark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.03)';
+  const contactBg = dark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.02)';
+  const linkColor = dark ? '#60a5fa' : '#2563eb';
+  const backHover = dark ? '#FFF' : '#000';
+
+  return (
+    <div style={{ minHeight: '100vh', background: bg, color: fg, transition: 'background 0.3s, color 0.3s' }}>
+      <style>{`
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background: #000; }
+        body { background: ${bg}; transition: background 0.3s; }
 
         .blog-article {
-          font-family: 'Inter', sans-serif;
           max-width: 780px;
           margin: 0 auto;
           padding: 40px 24px 100px;
         }
 
+        .top-bar {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 2rem;
+        }
+
         .back-link {
           display: inline-block;
-          font-family: 'Inter', sans-serif;
+
           font-size: 0.9rem;
-          color: #9ca3af;
+          color: ${muted};
           text-decoration: none;
-          margin-bottom: 2rem;
           transition: color 0.2s;
         }
-        .back-link:hover { color: #FFF; }
+        .back-link:hover { color: ${backHover}; }
+
+        .theme-toggle {
+
+          font-size: 0.8rem;
+          padding: 0.4rem 0.8rem;
+          border-radius: 6px;
+          border: 1px solid ${border};
+          background: ${codeBg};
+          color: ${muted};
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+        .theme-toggle:hover {
+          color: ${fg};
+          border-color: ${muted};
+        }
 
         .blog-header {
           margin-bottom: 2rem;
@@ -37,26 +68,25 @@ export default function GeoCaseStudy() {
         .blog-header h1 {
           font-size: clamp(1.875rem, 5vw, 2.75rem);
           font-weight: 700;
-          color: #FFF;
+          color: ${fg};
           line-height: 1.3;
           margin-bottom: 1rem;
         }
 
         .blog-header .description {
           font-size: 1.25rem;
-          color: #9ca3af;
+          color: ${muted};
           margin-bottom: 1rem;
         }
 
         .blog-header .meta {
           font-size: 0.875rem;
-          color: #6b7280;
+          color: ${muted};
         }
 
-        /* Blog content styles matching itsfilterrod */
         .blog-content {
           line-height: 1.8;
-          color: #d1d5db;
+          color: ${body};
         }
 
         .blog-content h2 {
@@ -64,8 +94,8 @@ export default function GeoCaseStudy() {
           font-weight: 700;
           margin-top: 2rem;
           margin-bottom: 1rem;
-          color: #fff;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+          color: ${fg};
+          border-bottom: 1px solid ${border};
           padding-bottom: 0.5rem;
         }
 
@@ -74,17 +104,17 @@ export default function GeoCaseStudy() {
           font-weight: 600;
           margin-top: 1.5rem;
           margin-bottom: 0.75rem;
-          color: #fff;
+          color: ${fg};
         }
 
         .blog-content p {
           margin-bottom: 1.25rem;
-          color: #d1d5db;
+          color: ${body};
         }
 
         .blog-content strong {
           font-weight: 700;
-          color: #fff;
+          color: ${fg};
         }
 
         .blog-content ul, .blog-content ol {
@@ -92,35 +122,27 @@ export default function GeoCaseStudy() {
           padding-left: 1.5rem;
         }
 
-        .blog-content ul {
-          list-style-type: disc;
-        }
-
-        .blog-content ol {
-          list-style-type: decimal;
-        }
+        .blog-content ul { list-style-type: disc; }
+        .blog-content ol { list-style-type: decimal; }
 
         .blog-content li {
           margin-bottom: 0.5rem;
-          color: #d1d5db;
+          color: ${body};
         }
 
         .blog-content a {
-          color: #60a5fa;
+          color: ${linkColor};
           text-decoration: none;
         }
-
-        .blog-content a:hover {
-          text-decoration: underline;
-        }
+        .blog-content a:hover { text-decoration: underline; }
 
         .blog-content em {
           font-style: italic;
-          color: #9ca3af;
+          color: ${muted};
         }
 
         .blog-content code {
-          background-color: rgba(255, 255, 255, 0.1);
+          background-color: ${codeBg};
           padding: 0.125rem 0.375rem;
           border-radius: 0.25rem;
           font-size: 0.875rem;
@@ -129,7 +151,7 @@ export default function GeoCaseStudy() {
 
         .blog-content hr {
           border: none;
-          border-top: 1px solid rgba(255, 255, 255, 0.1);
+          border-top: 1px solid ${border};
           margin: 2rem 0;
         }
 
@@ -142,41 +164,41 @@ export default function GeoCaseStudy() {
 
         .blog-content th,
         .blog-content td {
-          border: 1px solid rgba(255, 255, 255, 0.1);
+          border: 1px solid ${border};
           padding: 0.75rem;
           text-align: left;
         }
 
         .blog-content th {
-          background-color: rgba(255, 255, 255, 0.05);
+          background-color: ${thBg};
           font-weight: 600;
-          color: #fff;
+          color: ${fg};
         }
 
         .blog-content td {
-          color: #d1d5db;
+          color: ${body};
         }
 
         .blog-content blockquote {
-          border-left: 4px solid rgba(255, 255, 255, 0.3);
+          border-left: 4px solid ${border};
           padding-left: 1rem;
           margin: 1.5rem 0;
-          color: #9ca3af;
+          color: ${muted};
           font-style: italic;
         }
 
         .contact-box {
           margin-top: 1rem;
           padding: 1.5rem;
-          background-color: rgba(255, 255, 255, 0.05);
-          border: 1px solid rgba(255, 255, 255, 0.1);
+          background-color: ${contactBg};
+          border: 1px solid ${border};
           border-radius: 0.5rem;
         }
 
         .blog-footer {
           margin-top: 3rem;
           padding-top: 2rem;
-          border-top: 1px solid rgba(255, 255, 255, 0.1);
+          border-top: 1px solid ${border};
         }
 
         @media (max-width: 600px) {
@@ -187,7 +209,12 @@ export default function GeoCaseStudy() {
       `}</style>
 
       <div className="blog-article">
-        <a href="/" className="back-link">&larr; Back to Home</a>
+        <div className="top-bar">
+          <a href="/" className="back-link">&larr; Back to Home</a>
+          <button className="theme-toggle" onClick={() => setDark(!dark)}>
+            {dark ? 'Light Mode' : 'Dark Mode'}
+          </button>
+        </div>
 
         <header className="blog-header">
           <h1>Case Study: How a Niche Indonesian Manufacturer Got Cited by AI Using llms.txt</h1>

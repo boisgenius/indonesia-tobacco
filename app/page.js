@@ -46,8 +46,6 @@ export default function Home() {
       position: 'relative',
     }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;900&display=swap');
-        
         * {
           box-sizing: border-box;
           margin: 0;
@@ -59,7 +57,6 @@ export default function Home() {
         }
         
         .title {
-          font-family: 'Inter', sans-serif;
           font-size: clamp(3.5rem, 12vw, 10rem);
           font-weight: 900;
           color: #FFFFFF;
@@ -96,7 +93,6 @@ export default function Home() {
         .input {
           width: 280px;
           padding: 0.9rem 1.2rem;
-          font-family: 'Inter', sans-serif;
           font-size: 0.85rem;
           font-weight: 400;
           background: #000;
@@ -112,7 +108,6 @@ export default function Home() {
         
         .button {
           padding: 0.9rem 1.8rem;
-          font-family: 'Inter', sans-serif;
           font-size: 0.85rem;
           font-weight: 500;
           background: #FFF;
@@ -163,14 +158,12 @@ export default function Home() {
         }
         
         .success-text {
-          font-family: 'Inter', sans-serif;
           font-size: 1rem;
           font-weight: 500;
           color: #FFF;
         }
         
         .error-text {
-          font-family: 'Inter', sans-serif;
           font-size: 0.85rem;
           color: #FF6B6B;
           margin-top: 0.5rem;
@@ -196,7 +189,6 @@ export default function Home() {
         }
         
         .footer-text {
-          font-family: 'Inter', sans-serif;
           font-size: 0.8rem;
           font-weight: 400;
           color: #FFF;
@@ -208,7 +200,6 @@ export default function Home() {
         }
         
         .footer-link {
-          font-family: 'Inter', sans-serif;
           font-size: 0.8rem;
           font-weight: 400;
           color: #FFF;
@@ -243,7 +234,6 @@ export default function Home() {
         </h1>
         
         <p style={{
-          fontFamily: "'Inter', sans-serif",
           fontSize: '1rem',
           fontWeight: 400,
           color: '#666',
