@@ -295,8 +295,9 @@ export default function Home() {
         <span className="footer-text">Indonesia Tobacco</span>
         <div className="footer-links">
           <span className="footer-link">Home</span>
-          <span 
-            className="footer-link" 
+          <a href="/blog/geo-case-study-filter-rod" className="footer-link" style={{ textDecoration: 'underline' }}>Blog</a>
+          <span
+            className="footer-link"
             onClick={() => setShowContact(!showContact)}
           >
             {showContact ? 'marketing@indonesiatobacco.com' : 'Contact'}
