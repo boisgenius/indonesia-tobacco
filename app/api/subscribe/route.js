@@ -1,7 +1,8 @@
 import { kv } from '@vercel/kv';
 import { NextResponse } from 'next/server';
 
-const NOTIFY_EMAIL = 'connect@indonesiatobacco.com';
+const NOTIFY_EMAIL = process.env.NOTIFY_EMAIL || 'connect@indonesiatobacco.com';
+const RESEND_FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'Indonesia Tobacco <notifications@indonesiatobacco.com>';
 
 export async function POST(request) {
   try {
@@ -35,7 +36,7 @@ export async function POST(request) {
         const { Resend } = await import('resend');
         const resend = new Resend(process.env.RESEND_API_KEY);
         await resend.emails.send({
-          from: 'Indonesia Tobacco <notifications@indonesiatobacco.com>',
+          from: RESEND_FROM_EMAIL,
           to: NOTIFY_EMAIL,
           subject: `🚀 New Subscriber: ${email}`,
           html: `
