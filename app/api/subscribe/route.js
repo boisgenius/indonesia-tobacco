@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server';
 
 const NOTIFY_EMAIL = process.env.NOTIFY_EMAIL || 'connect@indonesiatobacco.com';
 const RESEND_FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'Indonesia Tobacco <notifications@indonesiatobacco.com>';
+const hasKvConfig = Boolean(process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN);
 
 export async function POST(request) {
   try {
@@ -22,13 +23,21 @@ export async function POST(request) {
       timeStyle: 'short',
     });
 
-    // Add to a set (prevents duplicates)
-    const isNew = await kv.sadd('emails', email);
+    let isNew = true;
 
-    // Also store with timestamp for reference
-    await kv.hset('email_details', {
-      [email]: timestamp
-    });
+    if (hasKvConfig) {
+      try {
+        // Add to a set (prevents duplicates)
+        isNew = await kv.sadd('emails', email);
+
+        // Also store with timestamp for reference
+        await kv.hset('email_details', {
+          [email]: timestamp
+        });
+      } catch (storageError) {
+        console.error('Failed to store subscriber email:', storageError);
+      }
+    }
 
     // Send notification email for new subscribers
     if (isNew && process.env.RESEND_API_KEY) {
@@ -78,7 +87,16 @@ export async function POST(request) {
 }
 
 // GET route to retrieve all emails (protect this in production!)
-export async function GET(request) {
+export async function GET() {
+  if (!hasKvConfig) {
+    return NextResponse.json({
+      count: 0,
+      emails: [],
+      details: {},
+      storageAvailable: false
+    });
+  }
+
   try {
     // Get all emails
     const emails = await kv.smembers('emails');
@@ -87,13 +105,16 @@ export async function GET(request) {
     return NextResponse.json({
       count: emails.length,
       emails,
-      details
+      details,
+      storageAvailable: true
     });
   } catch (error) {
     console.error('Error fetching emails:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch emails' },
-      { status: 500 }
-    );
+    return NextResponse.json({
+      count: 0,
+      emails: [],
+      details: {},
+      storageAvailable: false
+    });
   }
 }
