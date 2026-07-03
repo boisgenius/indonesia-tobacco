@@ -1,9 +1,11 @@
 'use client';
 
 import { useState } from 'react';
+import { useThemeTransition, themeTransitionCSS } from '../../components/theme-toggle';
 
 export default function GeoCaseStudy() {
   const [dark, setDark] = useState(false);
+  const { toggleRef, toggle } = useThemeTransition(dark, setDark);
 
   const bg = dark ? '#000' : '#FFFFFF';
   const fg = dark ? '#FFF' : '#111';
@@ -19,8 +21,15 @@ export default function GeoCaseStudy() {
   return (
     <div style={{ minHeight: '100vh', background: bg, color: fg, transition: 'background 0.3s, color 0.3s' }}>
       <style>{`
+        ${themeTransitionCSS}
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { background: ${bg}; transition: background 0.3s; }
+
+        :root {
+          --nav-bg: ${bg} !important;
+          --nav-fg: ${fg} !important;
+          --nav-line: ${border} !important;
+        }
 
         .blog-article {
           max-width: 780px;
@@ -211,7 +220,7 @@ export default function GeoCaseStudy() {
       <div className="blog-article">
         <div className="top-bar">
           <a href="/" className="back-link">&larr; Back to Home</a>
-          <button className="theme-toggle" onClick={() => setDark(!dark)}>
+          <button ref={toggleRef} className="theme-toggle" onClick={toggle}>
             {dark ? 'Light Mode' : 'Dark Mode'}
           </button>
         </div>

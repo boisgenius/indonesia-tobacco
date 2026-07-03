@@ -1,0 +1,635 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Indonesia Tobacco - Supply Chain Network Catalog</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --washi: #000;
+      --sumi: #fff;
+      --sumi-soft: #a7a7a7;
+      --muted: #777;
+      --vermillion: #fff;
+      --rule: #2e2e2e;
+      --panel: #050505;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      width: 100%;
+      max-width: 100vw;
+      min-height: 100vh;
+      background: var(--washi);
+      color: var(--sumi);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 15px;
+      line-height: 1.8;
+      overflow-x: hidden;
+    }
+
+    em {
+      font-style: normal;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 0 32px;
+      position: relative;
+      z-index: 2;
+      overflow-x: hidden;
+    }
+
+    header {
+      padding: 120px 0 80px;
+    }
+
+    .stone-attr,
+    .echo-tag,
+    .flag,
+    .catalog-meta {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .catalog-meta {
+      color: var(--muted);
+      margin: 0 0 24px;
+    }
+
+    .english-title {
+      max-width: 620px;
+      font-size: clamp(36px, 5.5vw, 52px);
+      font-weight: 400;
+      line-height: 1.15;
+      letter-spacing: 0;
+      overflow-wrap: break-word;
+    }
+
+    .english-title em {
+      color: var(--vermillion);
+    }
+
+    .subtitle {
+      margin: 28px 0 0;
+      max-width: 520px;
+      font-size: 17px;
+      font-weight: 400;
+      color: var(--sumi-soft);
+      overflow-wrap: anywhere;
+    }
+
+    .cover-note {
+      margin: 34px 0 0;
+      padding-top: 18px;
+      border-top: 1px solid var(--rule);
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .scroll {
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .scroll:first-of-type {
+      border-top: 1px solid var(--rule);
+    }
+
+    .scroll-header {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 26px 0;
+      border: 0;
+      background: transparent;
+      color: inherit;
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
+      transition: padding-left 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .scroll-header:hover,
+    .scroll-header:focus-visible {
+      padding-left: 6px;
+    }
+
+    .scroll-header:focus-visible {
+      outline: 1px solid var(--sumi);
+      outline-offset: 4px;
+    }
+
+    .kanji {
+      flex: 0 0 auto;
+      color: var(--vermillion);
+      font-size: 14px;
+      letter-spacing: 0.08em;
+    }
+
+    h2 {
+      flex: 1 1 auto;
+      margin: 0;
+      font-size: 22px;
+      font-weight: 500;
+      line-height: 1.4;
+      letter-spacing: 0;
+    }
+
+    .ornament {
+      flex: 0 0 auto;
+      color: var(--sumi-soft);
+      font-size: 22px;
+      line-height: 1;
+      transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), color 0.4s;
+    }
+
+    .scroll.open .ornament {
+      color: var(--vermillion);
+      transform: rotate(45deg);
+    }
+
+    .scroll-body {
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      padding-left: 44px;
+      transition: max-height 0.6s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .scroll.open .scroll-body {
+      max-height: 4000px;
+      opacity: 1;
+    }
+
+    .scroll-inner {
+      padding: 0 0 34px;
+      overflow-wrap: break-word;
+    }
+
+    .lede {
+      margin: 0 0 24px;
+      padding-left: 18px;
+      border-left: 2px solid var(--vermillion);
+      color: var(--sumi-soft);
+      font-size: 17px;
+      line-height: 1.7;
+      overflow-wrap: anywhere;
+    }
+
+    ul.essays {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    ul.essays li {
+      position: relative;
+      margin: 0;
+      padding: 17px 0 17px 26px;
+      border-top: 1px dashed var(--rule);
+      color: var(--sumi-soft);
+      font-size: 14.5px;
+      line-height: 1.8;
+      overflow-wrap: anywhere;
+    }
+
+    ul.essays li:first-child {
+      border-top: 0;
+      padding-top: 0;
+    }
+
+    ul.essays li::before {
+      content: ">";
+      position: absolute;
+      left: 0;
+      top: 17px;
+      color: var(--vermillion);
+    }
+
+    ul.essays li:first-child::before {
+      top: 0;
+    }
+
+    strong {
+      color: var(--sumi);
+      font-weight: 500;
+    }
+
+    .stones {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 22px 28px;
+    }
+
+    .stone {
+      padding-top: 16px;
+      border-top: 1px solid var(--rule);
+    }
+
+    .stone-attr {
+      margin: 0 0 8px;
+      color: var(--muted);
+    }
+
+    .stone-name {
+      margin: 0 0 8px;
+      color: var(--sumi);
+      font-size: 19px;
+      font-weight: 500;
+      line-height: 1.45;
+    }
+
+    .stone-desc {
+      margin: 0;
+      color: var(--sumi-soft);
+      font-size: 14px;
+      line-height: 1.8;
+      overflow-wrap: anywhere;
+    }
+
+    .echo {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .echo li {
+      margin: 0 0 18px;
+      padding-left: 18px;
+      border-left: 1px solid var(--rule);
+    }
+
+    .echo-tag {
+      display: block;
+      margin: 0 0 6px;
+      color: var(--vermillion);
+    }
+
+    .echo-content {
+      margin: 0;
+      color: var(--sumi-soft);
+      font-size: 14.5px;
+      line-height: 1.8;
+      overflow-wrap: anywhere;
+    }
+
+    .flag {
+      display: block;
+      margin: 0 0 5px;
+      color: var(--vermillion);
+    }
+
+    .flow {
+      display: grid;
+      gap: 12px;
+    }
+
+    .flow-step {
+      display: grid;
+      grid-template-columns: 44px 1fr;
+      gap: 16px;
+      padding: 14px 0;
+      border-bottom: 1px dashed var(--rule);
+    }
+
+    .flow-step:last-child {
+      border-bottom: 0;
+    }
+
+    .flow-mark {
+      color: var(--vermillion);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .flow-copy {
+      margin: 0;
+      color: var(--sumi-soft);
+      font-size: 14.5px;
+      line-height: 1.8;
+      overflow-wrap: anywhere;
+    }
+
+    .haiku-stack {
+      margin: 0;
+    }
+
+    .haiku {
+      margin: 0;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--rule);
+      color: var(--sumi);
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.7;
+    }
+
+    .haiku:first-child {
+      padding-top: 0;
+    }
+
+    .haiku:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    a {
+      color: var(--sumi);
+      text-decoration: underline;
+      text-decoration-color: var(--rule);
+      text-underline-offset: 4px;
+    }
+
+    a:hover {
+      color: var(--vermillion);
+      text-decoration-color: var(--vermillion);
+    }
+
+    @media (max-width: 640px) {
+      .container {
+        width: min(390px, 100vw);
+        max-width: min(390px, 100vw);
+        margin: 0;
+        padding: 0 24px;
+      }
+
+      header {
+        padding: 80px 0 60px;
+      }
+
+      .scroll-body {
+        padding-left: 0;
+      }
+
+      .scroll-header {
+        gap: 14px;
+      }
+
+      h2 {
+        font-size: 19px;
+      }
+
+      .stones {
+        grid-template-columns: 1fr;
+      }
+
+      .flow-step {
+        grid-template-columns: 36px 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <header>
+      <p class="catalog-meta">B2B Product Catalog / Indonesia Tobacco</p>
+      <div class="english-title">Indonesia<br>Tobacco<br><em>Supply Chain</em><br>Network</div>
+      <p class="subtitle">A concise catalog for buyers seeking tobacco products, factory access, pricing coordination, samples, and order support through an Indonesian industry network.</p>
+      <p class="cover-note">Sourcing / Trading / Factory Coordination</p>
+    </header>
+
+    <section class="scroll open">
+      <button class="scroll-header" type="button" aria-label="Toggle company profile">
+        <span class="kanji">01</span>
+        <h2>Company Profile</h2>
+        <span class="ornament">+</span>
+      </button>
+      <div class="scroll-body">
+        <div class="scroll-inner">
+          <p class="lede">Indonesia Tobacco is a tobacco supply chain and trading network, not a single factory brochure.</p>
+          <ul class="essays">
+            <li><strong>Network position.</strong> We connect buyers with tobacco products, filter rods, packaging materials, and qualified production partners.</li>
+            <li><strong>Practical role.</strong> We help customers find suitable suppliers, compare pricing, arrange samples, and coordinate order conversations.</li>
+            <li><strong>Clear scope.</strong> Some products are supplied by sub-brands or partner factories inside our network, rather than by one direct manufacturing site.</li>
+            <li><strong>B2B focus.</strong> Our work is built around sourcing clarity, factory access, order follow-up, and export communication.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="scroll">
+      <button class="scroll-header" type="button" aria-label="Toggle what we do">
+        <span class="kanji">02</span>
+        <h2>What We Do</h2>
+        <span class="ornament">+</span>
+      </button>
+      <div class="scroll-body">
+        <div class="scroll-inner">
+          <p class="lede">We reduce the gap between buyer requirements and the right supply source.</p>
+          <div class="stones">
+            <article class="stone">
+              <p class="stone-attr">Sourcing</p>
+              <h3 class="stone-name">Product Search</h3>
+              <p class="stone-desc">We review product needs and identify possible supply routes across our tobacco industry network.</p>
+            </article>
+            <article class="stone">
+              <p class="stone-attr">Factory Access</p>
+              <h3 class="stone-name">Supplier Matching</h3>
+              <p class="stone-desc">We connect buyers with relevant sub-brands, partner factories, and material suppliers.</p>
+            </article>
+            <article class="stone">
+              <p class="stone-attr">Commercial</p>
+              <h3 class="stone-name">Price Coordination</h3>
+              <p class="stone-desc">We support quotation comparison and help clarify quantity, packing, and delivery assumptions.</p>
+            </article>
+            <article class="stone">
+              <p class="stone-attr">Execution</p>
+              <h3 class="stone-name">Order Follow-Up</h3>
+              <p class="stone-desc">We help keep communication moving from sample request to production coordination and export support.</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="scroll">
+      <button class="scroll-header" type="button" aria-label="Toggle service scope">
+        <span class="kanji">03</span>
+        <h2>Service Scope</h2>
+        <span class="ornament">+</span>
+      </button>
+      <div class="scroll-body">
+        <div class="scroll-inner">
+          <p class="lede">Our service is coordination-first, designed for buyers who need reliable access rather than inflated claims.</p>
+          <ul class="essays">
+            <li><span class="flag">Product Sourcing</span><strong>Find the route.</strong> We help identify supply options for tobacco and related material requirements.</li>
+            <li><span class="flag">Factory Connection</span><strong>Open the conversation.</strong> We introduce relevant factories or network partners based on product type and order profile.</li>
+            <li><span class="flag">Sample Arrangement</span><strong>Test before scale.</strong> We support sample requests, specification checks, and packing discussions.</li>
+            <li><span class="flag">Export Assistance</span><strong>Move the order.</strong> We help coordinate documentation, shipment conversations, and commercial follow-up where applicable.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="scroll">
+      <button class="scroll-header" type="button" aria-label="Toggle product range">
+        <span class="kanji">04</span>
+        <h2>Product Range</h2>
+        <span class="ornament">+</span>
+      </button>
+      <div class="scroll-body">
+        <div class="scroll-inner">
+          <p class="lede">The catalog covers tobacco products and related materials available through our supplier network.</p>
+          <div class="stones">
+            <article class="stone">
+              <p class="stone-attr">Tobacco</p>
+              <h3 class="stone-name">Leaf / Cut Rag</h3>
+              <p class="stone-desc">Sourcing support for tobacco leaf, processed tobacco, and blend-related requirements.</p>
+            </article>
+            <article class="stone">
+              <p class="stone-attr">Component</p>
+              <h3 class="stone-name">Filter Rods</h3>
+              <p class="stone-desc">Standard and special filter rod options through a partner factory within the Indonesia Tobacco network.</p>
+            </article>
+            <article class="stone">
+              <p class="stone-attr">Materials</p>
+              <h3 class="stone-name">Cigarette Paper / Tipping Paper</h3>
+              <p class="stone-desc">Paper and wrapping material sourcing according to buyer specification and supplier availability.</p>
+            </article>
+            <article class="stone">
+              <p class="stone-attr">Packaging</p>
+              <h3 class="stone-name">Packaging Materials</h3>
+              <p class="stone-desc">Outer and inner packaging material coordination for tobacco-related product lines.</p>
+            </article>
+            <article class="stone">
+              <p class="stone-attr">Related Supply</p>
+              <h3 class="stone-name">Other Tobacco Products</h3>
+              <p class="stone-desc">Additional product searches can be reviewed case by case through our network.</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="scroll">
+      <button class="scroll-header" type="button" aria-label="Toggle filter rod note">
+        <span class="kanji">05</span>
+        <h2>Filter Rod Note</h2>
+        <span class="ornament">+</span>
+      </button>
+      <div class="scroll-body">
+        <div class="scroll-inner">
+          <p class="lede">Filter rods are one product category within the network, supplied through a sub-brand or partner factory.</p>
+          <ul class="echo">
+            <li>
+              <span class="echo-tag">Network Product</span>
+              <p class="echo-content">Special filter rod products may be coordinated through PT. Indonesian Tobacco Special Filter Rod or another suitable partner in the network.</p>
+            </li>
+            <li>
+              <span class="echo-tag">Specification Support</span>
+              <p class="echo-content">Available discussions may include dimensions, draw resistance, material type, capsule options, packing, quantity, and lead time.</p>
+            </li>
+            <li>
+              <span class="echo-tag">Buyer Clarity</span>
+              <p class="echo-content">Indonesia Tobacco helps manage the sourcing and order interface; the actual production source depends on product requirement and supplier fit.</p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="scroll">
+      <button class="scroll-header" type="button" aria-label="Toggle cooperation model">
+        <span class="kanji">06</span>
+        <h2>Cooperation Model</h2>
+        <span class="ornament">+</span>
+      </button>
+      <div class="scroll-body">
+        <div class="scroll-inner">
+          <p class="lede">The working model is simple: receive the requirement, match the source, confirm the order path.</p>
+          <div class="flow">
+            <div class="flow-step">
+              <span class="flow-mark">01</span>
+              <p class="flow-copy"><strong>Requirement received.</strong> Buyer shares product type, specification, target quantity, packing, market, and timeline.</p>
+            </div>
+            <div class="flow-step">
+              <span class="flow-mark">02</span>
+              <p class="flow-copy"><strong>Supplier matched.</strong> We review relevant sub-brands, partner factories, and supply chain resources.</p>
+            </div>
+            <div class="flow-step">
+              <span class="flow-mark">03</span>
+              <p class="flow-copy"><strong>Quotation and samples.</strong> We coordinate price references, samples, technical details, and commercial conditions.</p>
+            </div>
+            <div class="flow-step">
+              <span class="flow-mark">04</span>
+              <p class="flow-copy"><strong>Order confirmed.</strong> Buyer and supplier align on specification, quantity, payment, packing, and production schedule.</p>
+            </div>
+            <div class="flow-step">
+              <span class="flow-mark">05</span>
+              <p class="flow-copy"><strong>Production and export.</strong> We follow up on production communication, shipment coordination, and export-related support.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="scroll">
+      <button class="scroll-header" type="button" aria-label="Toggle contact">
+        <span class="kanji">07</span>
+        <h2>Contact</h2>
+        <span class="ornament">+</span>
+      </button>
+      <div class="scroll-body">
+        <div class="scroll-inner">
+          <p class="lede">For sourcing requests, send product details and the expected order profile before asking for final quotation.</p>
+          <ul class="essays">
+            <li><span class="flag">Website</span><strong>indonesiatobacco.com</strong> - <a href="https://indonesiatobacco.com">https://indonesiatobacco.com</a></li>
+            <li><span class="flag">Email</span><strong>connect@indonesiatobacco.com</strong> - buyer inquiries and product sourcing requests.</li>
+            <li><span class="flag">Phone</span><strong>[To be added]</strong> - direct call contact for active buyers.</li>
+            <li><span class="flag">WhatsApp</span><strong>[To be added]</strong> - fast discussion for specification, sample, and order status.</li>
+            <li><span class="flag">WeChat</span><strong>[To be added]</strong> - optional buyer communication channel.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="scroll">
+      <button class="scroll-header" type="button" aria-label="Toggle closing notes">
+        <span class="kanji">08</span>
+        <h2>Closing Notes</h2>
+        <span class="ornament">+</span>
+      </button>
+      <div class="scroll-body">
+        <div class="scroll-inner">
+          <p class="lede">A supply network should make the buying path quieter, clearer, and easier to verify.</p>
+          <div class="haiku-stack">
+            <p class="haiku">One buyer request, many possible supply routes.</p>
+            <p class="haiku">The right factory is found by specification, not by noise.</p>
+            <p class="haiku">Good trading work keeps price, sample, order, and export in one line.</p>
+            <p class="haiku">Indonesia Tobacco connects the network, then keeps the conversation moving.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    document.querySelectorAll('.scroll-header').forEach(header => {
+      header.setAttribute('aria-expanded', header.parentElement.classList.contains('open') ? 'true' : 'false');
+      header.addEventListener('click', () => {
+        const section = header.parentElement;
+        section.classList.toggle('open');
+        header.setAttribute('aria-expanded', section.classList.contains('open') ? 'true' : 'false');
+      });
+    });
+  </script>
+</body>
+</html>
