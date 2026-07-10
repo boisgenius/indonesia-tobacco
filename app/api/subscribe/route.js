@@ -24,6 +24,7 @@ export async function POST(request) {
     });
 
     let isNew = true;
+    let stored = false;
 
     if (hasKvConfig) {
       try {
@@ -34,12 +35,17 @@ export async function POST(request) {
         await kv.hset('email_details', {
           [email]: timestamp
         });
+        stored = true;
       } catch (storageError) {
         console.error('Failed to store subscriber email:', storageError);
       }
+    } else {
+      console.error('KV not configured — subscriber email NOT stored:', email);
     }
 
-    // Send notification email for new subscribers
+    // Send notification email for new subscribers.
+    // This also acts as a capture net: if storage is down, the notification
+    // still fires so the lead can be recovered from the inbox.
     if (isNew && process.env.RESEND_API_KEY) {
       try {
         const { Resend } = await import('resend');
@@ -47,9 +53,10 @@ export async function POST(request) {
         await resend.emails.send({
           from: RESEND_FROM_EMAIL,
           to: NOTIFY_EMAIL,
-          subject: `🚀 New Subscriber: ${email}`,
+          subject: `${stored ? '🚀' : '⚠️'} New Subscriber: ${email}${stored ? '' : ' (NOT STORED — DB down)'}`,
           html: `
             <div style="font-family: 'Helvetica Neue', Arial, sans-serif; max-width: 500px; margin: 0 auto; background: #0a0a0a; border-radius: 12px; overflow: hidden; border: 1px solid #222;">
+              ${stored ? '' : '<div style="padding: 12px 32px; background: #4a1a1a; color: #ffb3b3; font-size: 12px; text-align: center;">⚠️ Storage was unavailable — this subscriber was NOT saved to the database. Add them manually once storage is restored.</div>'}
               <div style="padding: 32px; text-align: center; background: linear-gradient(135deg, #111 0%, #1a1a2e 100%);">
                 <h1 style="color: #fff; font-size: 20px; font-weight: 700; margin: 0 0 4px 0; letter-spacing: -0.02em;">NEW SUBSCRIBER</h1>
                 <p style="color: #666; font-size: 13px; margin: 0;">Indonesia Tobacco Mailing List</p>
@@ -74,6 +81,15 @@ export async function POST(request) {
         // Log but don't fail the subscription if notification fails
         console.error('Failed to send notification email:', emailError);
       }
+    }
+
+    // Don't fake success: if the email wasn't actually stored, tell the client.
+    // The lead is still captured via the notification email above.
+    if (!stored) {
+      return NextResponse.json(
+        { error: 'Subscription is temporarily unavailable. Please try again shortly.' },
+        { status: 503 }
+      );
     }
 
     return NextResponse.json({ success: true });
