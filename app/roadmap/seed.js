@@ -3,12 +3,13 @@
 // and the baseline the "Reset to original" action restores.
 // Source: 05-Beginner-Step-by-Step-Guide (EN).pdf, prepared 28 July 2026.
 
-export const GUIDE_VERSION = 1;
+export const GUIDE_VERSION = 2;
 
 export const seedDoc = {
   version: GUIDE_VERSION,
   title: 'RYO Filter — Step-by-Step Implementation Guide',
   subtitle: 'The execution sequence from the earliest stage to the first sale',
+  branches: [],
   intro: [
     {
       id: 'intro-1',

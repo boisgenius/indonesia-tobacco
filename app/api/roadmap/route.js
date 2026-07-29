@@ -7,6 +7,9 @@ export const dynamic = 'force-dynamic';
 const DOC_KEY = 'roadmap:v1';
 const HISTORY_KEY = 'roadmap:history';
 const HISTORY_LIMIT = 20;
+const BRANCH_LIMIT = 50;
+const BRANCH_WORD_LIMIT = 6;
+const BRANCH_TITLE_MAX_CHARS = 60;
 // Roughly 10x the seed document. Enough headroom for real edits, small enough
 // that a key holder can't push megabytes into storage by accident.
 const MAX_DOC_BYTES = 400_000;
@@ -29,8 +32,36 @@ function looksLikeDoc(doc) {
     typeof doc === 'object' &&
     !Array.isArray(doc) &&
     typeof doc.title === 'string' &&
-    Array.isArray(doc.parts)
+    Array.isArray(doc.parts) &&
+    looksLikeBranches(doc.branches)
   );
+}
+
+function looksLikeBranches(branches) {
+  // Older saved documents predate branches and remain valid.
+  if (branches === undefined) return true;
+  if (!Array.isArray(branches) || branches.length > BRANCH_LIMIT) return false;
+
+  const ids = new Set();
+  return branches.every((branch) => {
+    if (
+      !branch ||
+      typeof branch !== 'object' ||
+      typeof branch.id !== 'string' ||
+      typeof branch.parentId !== 'string' ||
+      typeof branch.title !== 'string' ||
+      !/^branch-[a-z0-9-]+$/i.test(branch.id) ||
+      !/^(step-(?:[1-9]|1[0-3])|gate-excise)$/.test(branch.parentId) ||
+      !branch.title.trim() ||
+      branch.title.length > BRANCH_TITLE_MAX_CHARS ||
+      branch.title.trim().split(/\s+/).length > BRANCH_WORD_LIMIT ||
+      ids.has(branch.id)
+    ) {
+      return false;
+    }
+    ids.add(branch.id);
+    return true;
+  });
 }
 
 // Public read. Anyone can view the guide; nothing here is gated.
